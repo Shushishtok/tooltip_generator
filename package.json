@@ -1,7 +1,7 @@
 {
   "name": "@shushishtok/tooltip_generator",
   "version": "1.0.0",
-  "description": "Code generator for automatically creating tooltips for Dota 2 custom games.",
+  "description": "Code generator that makes creating tooltips for Dota 2 custom games much easier.",
   "main": "fsWatcher.js",
   "scripts": {
     "build": "run-p build:*",
@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/Shushishtok/tooltip_generator.git"
   },
-  "keywords": [],
+  "keywords": ["Dota", "Custom", "Game", "Tooltip", "Generator"],
   "author": "Shush",
   "license": "ISC",
   "bugs": {
