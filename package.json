@@ -1,6 +1,6 @@
 {
   "name": "@shushishtok/tooltip_generator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Code generator that makes creating tooltips for Dota 2 custom games much easier.",
   "main": "fsWatcher.js",
   "scripts": {
