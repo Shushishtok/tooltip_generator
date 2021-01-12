@@ -1,0 +1,22 @@
+{
+    "name": "dota-tooltip-generator",
+    "private": true,
+    "scripts": 
+    {        
+        "build": "run-p build:*",        
+        "dev": "run-p dev:*",        
+        "dev:localizationCompiler": "tsc --project game/resource/tsconfig.json --watch",
+        "dev:localizationCompilerWatcher": "tsc --project game/resource/tsconfig.json",
+        "dev:runlocalizationWatcher": "node fsWatcher.js"
+    },
+    "devDependencies": {
+        "@types/node": "^14.14.20",        
+        "fs-extra": "^9.0.1", 
+        "ts-node": "^9.1.1"
+    },
+    "dependencies": {
+        "@types/node": "^14.14.20",
+        "link-module-alias": "^1.2.0",
+        "node-watch": "^0.7.1"        
+    }
+}
