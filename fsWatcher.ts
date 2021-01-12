@@ -1,11 +1,11 @@
 import * as fs from 'fs';
-import { LocalizationCompiler } from './game/resource/localizationCompiler';
-import { LocalizationData} from './game/resource/localizationInterfaces';
+import { LocalizationCompiler } from './resource/localizationCompiler';
+import { LocalizationData} from './resource/localizationInterfaces';
 const watch = require("node-watch");
 
 let completeData: {[path: string]: LocalizationData} = {};
 
-let watcher = watch(["./game/resource/localization", "./game/resource/localizationCompiler.js"], {recursive: true})
+let watcher = watch(["./resource/localization", "./resource/localizationCompiler.js"], {recursive: true})
 watcher.on("change", (eventType ?: 'update' | 'remove' | undefined, filePath ?: string) => {
 	if (!filePath) return;
 	if (filePath.includes("localizationCompiler.js")) {
@@ -59,8 +59,8 @@ function combineData() {
 function loadCompiler(): LocalizationCompiler
 {
     // Clear require cache
-    delete require.cache[require.resolve("./game/resource/localizationCompiler")]
+    delete require.cache[require.resolve("./resource/localizationCompiler")]
     // Require latest compiler version
-    const compilerClass: new () => LocalizationCompiler = require("./game/resource/localizationCompiler").LocalizationCompiler;
+    const compilerClass: new () => LocalizationCompiler = require("./resource/localizationCompiler").LocalizationCompiler;
     return new compilerClass();
 }
