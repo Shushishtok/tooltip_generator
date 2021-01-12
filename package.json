@@ -1,22 +1,33 @@
 {
-    "name": "dota-tooltip-generator",
-    "private": true,
-    "scripts": 
-    {        
-        "build": "run-p build:*",        
-        "dev": "run-p dev:*",        
-        "dev:localizationCompiler": "tsc --project game/resource/tsconfig.json --watch",
-        "dev:localizationCompilerWatcher": "tsc --project game/resource/tsconfig.json",
-        "dev:runlocalizationWatcher": "node fsWatcher.js"
+  "name": "tooltip_generator",
+  "version": "1.0.0",
+  "description": "Code generator for automatically creating tooltips for Dota 2 custom games.",
+  "main": "fsWatcher.js",
+  "scripts": {
+    "build": "run-p build:*",
+    "dev": "run-p dev:*",
+    "dev:localizationCompiler": "tsc --project game/resource/tsconfig.json --watch",
+    "dev:localizationCompilerWatcher": "tsc --project game/resource/tsconfig.json",
+    "dev:runlocalizationWatcher": "node fsWatcher.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shushishtok/tooltip_generator.git"
+  },
+  "keywords": [],
+  "author": "Shush",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shushishtok/tooltip_generator/issues"
+  },
+  "homepage": "https://github.com/Shushishtok/tooltip_generator#readme",
+  "devDependencies": {
+    "@types/node": "^14.14.20",    
+    "fs-extra": "^9.0.1",    
+    "ts-node": "^9.1.1"   
     },
-    "devDependencies": {
-        "@types/node": "^14.14.20",        
-        "fs-extra": "^9.0.1", 
-        "ts-node": "^9.1.1"
-    },
-    "dependencies": {
-        "@types/node": "^14.14.20",
-        "link-module-alias": "^1.2.0",
-        "node-watch": "^0.7.1"        
+  "dependencies": {    
+    "link-module-alias": "^1.2.0",
+    "node-watch": "^0.7.1"    
     }
 }
