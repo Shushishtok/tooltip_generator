@@ -17,5 +17,18 @@ I heavily recommend using VSCode, not only because of its internal support of No
 * Run `npx tsc .\fsWatcher.ts` on project root. Note that it needs to be the `.ts` file, not the `.js` one.
 * Navigate to your resource folder with `cd game/resource` or `cd /resource`
 * Run `npx tsc`
-* Run build task: `CTRL+SHIFT+B` on VSCode.
+* Run build task: `CTRL+SHIFT+B` on VSCode. If you're using Sublime follow the instructions below.
 * Test: in the resource folder, go to `/localization`, open `localizationData.ts`, change one or more characters in the localization, and save. The terminal should show updates, and addon_english should update with that change.
+
+# Running build task with Sublime:
+Credits to Nibuja for this part.
+
+Tools > Build System > New Build System...
+```
+{
+    "shell_cmd": "npm run dev"
+}
+```
+
+Save as any name like `dota_ts.sublime-build`
+have `fsWatcher.ts` or `package.json` or any other file from the project open -> press Ctrl + Shift + B -> select `dota_ts` -> console opens and it is run, is closed with esc, will still continue to compile everything until sublime is closed.
