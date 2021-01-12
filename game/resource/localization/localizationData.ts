@@ -1,4 +1,4 @@
-import { AbilityLocalization, HeroTalents, Language, LocalizationData, ModifierLocalization, StandardLocalization } from "../localizationInterfaces";
+import { AbilityLocalization, Language, LocalizationData, ModifierLocalization, StandardLocalization } from "../localizationInterfaces";
 
 export function GenerateLocalizationData(): LocalizationData
 {
@@ -7,16 +7,14 @@ export function GenerateLocalizationData(): LocalizationData
     // Arrays
     const Abilities: Array<AbilityLocalization> = new Array<AbilityLocalization>();
     const Modifiers: Array<ModifierLocalization> = new Array<ModifierLocalization>();
-    const StandardTooltips: Array<StandardLocalization> = new Array<StandardLocalization>();
-    const Talents: Array<HeroTalents> = new Array<HeroTalents>();
+    const StandardTooltips: Array<StandardLocalization> = new Array<StandardLocalization>();    
 
     // Create object of arrays
     const localization_info: LocalizationData =
     {
         AbilityArray: Abilities,
         ModifierArray: Modifiers,
-        StandardArray: StandardTooltips,
-        TalentArray: Talents
+        StandardArray: StandardTooltips,        
     };
     //#endregion
 
