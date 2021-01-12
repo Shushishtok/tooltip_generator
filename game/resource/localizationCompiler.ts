@@ -1,10 +1,11 @@
 import * as fs from 'fs';
+import * as path from 'path'
 // import { GenerateLocalizationData } from "./localizationData";
 import { LocalizationData, Language, AbilityLocalization, ModifierLocalization, StandardLocalization } from "./localizationInterfaces";
 
 export class LocalizationCompiler
 {
-    addon_filepath: string = "game/resource/addon_";
+    addon_filepath: string = path.join(__dirname, "addon_");
     filepath_format: string = ".txt";
 
     // Helper functions

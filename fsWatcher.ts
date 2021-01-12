@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-const path = require('path');
 import { LocalizationCompiler } from './game/resource/localizationCompiler';
 import { LocalizationData} from './game/resource/localizationInterfaces';
 const watch = require("node-watch");
