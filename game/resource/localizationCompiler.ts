@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 // import { GenerateLocalizationData } from "./localizationData";
-import { LocalizationData, Language, AbilityLocalization, ModifierLocalization, StandardLocalization, HeroTalents, Weapons } from "./localizationInterfaces";
+import { LocalizationData, Language, AbilityLocalization, ModifierLocalization, StandardLocalization } from "./localizationInterfaces";
 
 export class LocalizationCompiler
 {
@@ -26,14 +26,14 @@ export class LocalizationCompiler
         let Abilities: Array<AbilityLocalization> = new Array<AbilityLocalization>();
         let Modifiers: Array<ModifierLocalization> = new Array<ModifierLocalization>();
         let StandardTooltips: Array<StandardLocalization> = new Array<StandardLocalization>();
-        let Talents: Array<HeroTalents> = new Array<HeroTalents>();
+        //let Talents: Array<HeroTalents> = new Array<HeroTalents>();
 
         const localization_info: LocalizationData =
         {
             AbilityArray: Abilities,
             ModifierArray: Modifiers,
             StandardArray: StandardTooltips,
-            TalentArray: Talents,
+            // TalentArray: Talents,
         };
 
         for (const [key, data] of Object.entries(allData)) {
@@ -46,9 +46,9 @@ export class LocalizationCompiler
             if (data.StandardArray) {
                 Array.prototype.push.apply(StandardTooltips, data.StandardArray);
             }
-            if (data.TalentArray) {
-                Array.prototype.push.apply(Talents, data.TalentArray);
-            }
+            // if (data.TalentArray) {
+            //     Array.prototype.push.apply(Talents, data.TalentArray);
+            // }
         }
 
         console.log("Localization data generated");
@@ -99,7 +99,7 @@ export class LocalizationCompiler
                 // Name
                 let ability_name = ability.name;
                 let ability_description = ability.description;
-                let reimagined_effects = ability.reimagined_effects;
+                //let reimagined_effects = ability.reimagined_effects;
                 let ability_lore = ability.lore;
                 let ability_notes = ability.notes;
                 let scepter_description = ability.scepter_description;
@@ -125,10 +125,10 @@ export class LocalizationCompiler
                             }
 
                             // Check for reimagined effect overrides
-                            if (language_override.reimagined_effects_override)
-                            {
-                                reimagined_effects = language_override.reimagined_effects_override;
-                            }
+                            // if (language_override.reimagined_effects_override)
+                            // {
+                            //     reimagined_effects = language_override.reimagined_effects_override;
+                            // }
 
                             // Check for lore override
                             if (language_override.lore_override)
@@ -172,24 +172,24 @@ export class LocalizationCompiler
                 localization_content += `${ability_string}_description" "${ability_description}"`;
                 localization_content += "\n";
 
-                // Reimagined effects, if any
-                if (reimagined_effects)
-                {
-                    let counter = 1;
-                    for (const reimagined_effect of reimagined_effects)
-                    {
-                        // Reimagined title
-                        localization_content += `${ability_string}_rmg_title_${counter}" "${reimagined_effect.title}"`;
-                        localization_content += "\n";
+                // // Reimagined effects, if any
+                // if (reimagined_effects)
+                // {
+                //     let counter = 1;
+                //     for (const reimagined_effect of reimagined_effects)
+                //     {
+                //         // Reimagined title
+                //         localization_content += `${ability_string}_rmg_title_${counter}" "${reimagined_effect.title}"`;
+                //         localization_content += "\n";
 
-                        // Reimagined description
-                        const reimagined_effect_description = this.TransformForLocalization(reimagined_effect.description, false);
-                        localization_content += `${ability_string}_rmg_description_${counter}" "${reimagined_effect_description}"`;
-                        localization_content += "\n";
+                //         // Reimagined description
+                //         const reimagined_effect_description = this.TransformForLocalization(reimagined_effect.description, false);
+                //         localization_content += `${ability_string}_rmg_description_${counter}" "${reimagined_effect_description}"`;
+                //         localization_content += "\n";
 
-                        counter++;
-                    }
-                }
+                //         counter++;
+                //     }
+                // }
 
                 // Lore, if any
                 if (ability_lore)
@@ -255,65 +255,65 @@ export class LocalizationCompiler
         }
 
         // Go over talents for that language
-        if (localized_data.TalentArray) {
-            for (const hero_talent_list of localized_data.TalentArray)
-            {
-                const talent_classname = `\t\t"DOTA_Tooltip_Ability_${hero_talent_list.talent_classname}`;
-                let talent_counter = 1;
+        // if (localized_data.TalentArray) {
+        //     for (const hero_talent_list of localized_data.TalentArray)
+        //     {
+        //         const talent_classname = `\t\t"DOTA_Tooltip_Ability_${hero_talent_list.talent_classname}`;
+        //         let talent_counter = 1;
 
-                for (const talent of hero_talent_list.talents)
-                {
-                    let talent_name = talent.name;
-                    let talent_description = talent.description;
-                    let talent_lore = talent.lore;
+        //         for (const talent of hero_talent_list.talents)
+        //         {
+        //             let talent_name = talent.name;
+        //             let talent_description = talent.description;
+        //             let talent_lore = talent.lore;
 
-                    if (talent.language_overrides)
-                    {
-                        for (const language_override of talent.language_overrides)
-                        {
-                            // Only do overrides for the language that we're checking right now
-                            if (language_override.language === language)
-                            {
-                                // Check name override
-                                if (language_override.name_override)
-                                {
-                                    talent_name = language_override.name_override;
-                                }
+        //             if (talent.language_overrides)
+        //             {
+        //                 for (const language_override of talent.language_overrides)
+        //                 {
+        //                     // Only do overrides for the language that we're checking right now
+        //                     if (language_override.language === language)
+        //                     {
+        //                         // Check name override
+        //                         if (language_override.name_override)
+        //                         {
+        //                             talent_name = language_override.name_override;
+        //                         }
 
-                                // Check description override
-                                if (language_override.description_override)
-                                {
-                                    talent_description = language_override.description_override;
-                                }
+        //                         // Check description override
+        //                         if (language_override.description_override)
+        //                         {
+        //                             talent_description = language_override.description_override;
+        //                         }
 
-                                // Check lore override
-                                if (language_override.lore_override)
-                                {
-                                    talent_lore = language_override.lore_override;
-                                }
-                            }
-                        }
-                    }
+        //                         // Check lore override
+        //                         if (language_override.lore_override)
+        //                         {
+        //                             talent_lore = language_override.lore_override;
+        //                         }
+        //                     }
+        //                 }
+        //             }
 
-                    // Talent name
-                    const talent_string = `${talent_classname}_${talent_counter}`;
-                    localization_content += `${talent_string}" "${talent_name}"`
-                    localization_content += "\n";
+        //             // Talent name
+        //             const talent_string = `${talent_classname}_${talent_counter}`;
+        //             localization_content += `${talent_string}" "${talent_name}"`
+        //             localization_content += "\n";
 
-                    // Talent description
-                    talent_description = this.TransformForLocalization(talent_description, false);
-                    localization_content += `${talent_string}_Description" "${talent_description}"`
-                    localization_content += "\n";
+        //             // Talent description
+        //             talent_description = this.TransformForLocalization(talent_description, false);
+        //             localization_content += `${talent_string}_Description" "${talent_description}"`
+        //             localization_content += "\n";
 
-                    // Talent lore
-                    localization_content += `${talent_string}_Lore" "${talent_lore}"`
-                    localization_content += "\n";
+        //             // Talent lore
+        //             localization_content += `${talent_string}_Lore" "${talent_lore}"`
+        //             localization_content += "\n";
 
-                    // Increment talent counter
-                    talent_counter++;
-                }
-            }
-        }
+        //             // Increment talent counter
+        //             talent_counter++;
+        //         }
+        //     }
+        // }
 
         // Go over modifiers
         if (localized_data.ModifierArray) {
