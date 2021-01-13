@@ -12,6 +12,8 @@ I heavily recommend using VSCode, not only because of its internal support of No
 * Install NodeJS.
 * Install this module with `npm i @shushishtok/tooltip_generator` (please wait until you receive a message, that the adjustments are successful)
 * If your resource directory is NOT `/resource`, then you need to change the path in `package.json`: `"~resource": "YOUR_PATH/resource"`
+
+# Initialize the module!
 * Run `npm run init` to initialize the module
 
 # Build Instructions
