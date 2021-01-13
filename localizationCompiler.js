@@ -14,18 +14,19 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalizationCompiler = void 0;
 var fs = __importStar(require("fs"));
+var path = __importStar(require("path"));
 // import { GenerateLocalizationData } from "./localizationData";
 var localizationInterfaces_1 = require("./localizationInterfaces");
 var LocalizationCompiler = /** @class */ (function () {
     function LocalizationCompiler() {
-        this.addon_filepath = "game/resource/addon_";
+        this.addon_filepath = path.join("node_modules/~resource", "addon_");
         this.filepath_format = ".txt";
     }
     // Helper functions
@@ -38,16 +39,15 @@ var LocalizationCompiler = /** @class */ (function () {
         }
     };
     LocalizationCompiler.prototype.OnLocalizationDataChanged = function (allData) {
-        console.log("Localization event fired");
+        // console.log("Localization event fired");
         var Abilities = new Array();
         var Modifiers = new Array();
         var StandardTooltips = new Array();
-        var Talents = new Array();
+        //let Talents: Array<HeroTalents> = new Array<HeroTalents>();
         var localization_info = {
             AbilityArray: Abilities,
             ModifierArray: Modifiers,
             StandardArray: StandardTooltips,
-            TalentArray: Talents,
         };
         for (var _i = 0, _a = Object.entries(allData); _i < _a.length; _i++) {
             var _b = _a[_i], key = _b[0], data = _b[1];
@@ -60,11 +60,11 @@ var LocalizationCompiler = /** @class */ (function () {
             if (data.StandardArray) {
                 Array.prototype.push.apply(StandardTooltips, data.StandardArray);
             }
-            if (data.TalentArray) {
-                Array.prototype.push.apply(Talents, data.TalentArray);
-            }
+            // if (data.TalentArray) {
+            //     Array.prototype.push.apply(Talents, data.TalentArray);
+            // }
         }
-        console.log("Localization data generated");
+        // console.log("Localization data generated");
         // Generate information for every language
         var languages = Object.values(localizationInterfaces_1.Language).filter(function (v) { return typeof v !== "number"; });
         for (var _c = 0, languages_1 = languages; _c < languages_1.length; _c++) {
@@ -102,7 +102,7 @@ var LocalizationCompiler = /** @class */ (function () {
                 // Name
                 var ability_name = ability.name;
                 var ability_description = ability.description;
-                var reimagined_effects = ability.reimagined_effects;
+                //let reimagined_effects = ability.reimagined_effects;
                 var ability_lore = ability.lore;
                 var ability_notes = ability.notes;
                 var scepter_description = ability.scepter_description;
@@ -121,9 +121,10 @@ var LocalizationCompiler = /** @class */ (function () {
                                 ability_description = language_override.description_override;
                             }
                             // Check for reimagined effect overrides
-                            if (language_override.reimagined_effects_override) {
-                                reimagined_effects = language_override.reimagined_effects_override;
-                            }
+                            // if (language_override.reimagined_effects_override)
+                            // {
+                            //     reimagined_effects = language_override.reimagined_effects_override;
+                            // }
                             // Check for lore override
                             if (language_override.lore_override) {
                                 ability_lore = language_override.lore_override;
@@ -154,21 +155,22 @@ var LocalizationCompiler = /** @class */ (function () {
                 ability_description = this.TransformForLocalization(ability_description, false);
                 localization_content += ability_string + "_description\" \"" + ability_description + "\"";
                 localization_content += "\n";
-                // Reimagined effects, if any
-                if (reimagined_effects) {
-                    var counter = 1;
-                    for (var _h = 0, reimagined_effects_1 = reimagined_effects; _h < reimagined_effects_1.length; _h++) {
-                        var reimagined_effect = reimagined_effects_1[_h];
-                        // Reimagined title
-                        localization_content += ability_string + "_rmg_title_" + counter + "\" \"" + reimagined_effect.title + "\"";
-                        localization_content += "\n";
-                        // Reimagined description
-                        var reimagined_effect_description = this.TransformForLocalization(reimagined_effect.description, false);
-                        localization_content += ability_string + "_rmg_description_" + counter + "\" \"" + reimagined_effect_description + "\"";
-                        localization_content += "\n";
-                        counter++;
-                    }
-                }
+                // // Reimagined effects, if any
+                // if (reimagined_effects)
+                // {
+                //     let counter = 1;
+                //     for (const reimagined_effect of reimagined_effects)
+                //     {
+                //         // Reimagined title
+                //         localization_content += `${ability_string}_rmg_title_${counter}" "${reimagined_effect.title}"`;
+                //         localization_content += "\n";
+                //         // Reimagined description
+                //         const reimagined_effect_description = this.TransformForLocalization(reimagined_effect.description, false);
+                //         localization_content += `${ability_string}_rmg_description_${counter}" "${reimagined_effect_description}"`;
+                //         localization_content += "\n";
+                //         counter++;
+                //     }
+                // }
                 // Lore, if any
                 if (ability_lore) {
                     var transformed_lore = this.TransformForLocalization(ability_lore, false);
@@ -178,8 +180,8 @@ var LocalizationCompiler = /** @class */ (function () {
                 // Notes, if any
                 if (ability_notes) {
                     var counter = 0;
-                    for (var _j = 0, ability_notes_1 = ability_notes; _j < ability_notes_1.length; _j++) {
-                        var note = ability_notes_1[_j];
+                    for (var _h = 0, ability_notes_1 = ability_notes; _h < ability_notes_1.length; _h++) {
+                        var note = ability_notes_1[_h];
                         var transformed_note = this.TransformForLocalization(note, false);
                         localization_content += ability_string + "_Note" + counter + "\" \"" + transformed_note + "\"";
                         localization_content += "\n";
@@ -200,8 +202,8 @@ var LocalizationCompiler = /** @class */ (function () {
                 }
                 // Ability specials, if any
                 if (ability_specials) {
-                    for (var _k = 0, ability_specials_1 = ability_specials; _k < ability_specials_1.length; _k++) {
-                        var ability_special = ability_specials_1[_k];
+                    for (var _j = 0, ability_specials_1 = ability_specials; _j < ability_specials_1.length; _j++) {
+                        var ability_special = ability_specials_1[_j];
                         // Construct the ability special
                         var ability_special_text = "";
                         if (ability_special.percentage) {
@@ -218,63 +220,68 @@ var LocalizationCompiler = /** @class */ (function () {
             }
         }
         // Go over talents for that language
-        if (localized_data.TalentArray) {
-            for (var _l = 0, _m = localized_data.TalentArray; _l < _m.length; _l++) {
-                var hero_talent_list = _m[_l];
-                var talent_classname = "\t\t\"DOTA_Tooltip_Ability_" + hero_talent_list.talent_classname;
-                var talent_counter = 1;
-                for (var _o = 0, _p = hero_talent_list.talents; _o < _p.length; _o++) {
-                    var talent = _p[_o];
-                    var talent_name = talent.name;
-                    var talent_description = talent.description;
-                    var talent_lore = talent.lore;
-                    if (talent.language_overrides) {
-                        for (var _q = 0, _r = talent.language_overrides; _q < _r.length; _q++) {
-                            var language_override = _r[_q];
-                            // Only do overrides for the language that we're checking right now
-                            if (language_override.language === language) {
-                                // Check name override
-                                if (language_override.name_override) {
-                                    talent_name = language_override.name_override;
-                                }
-                                // Check description override
-                                if (language_override.description_override) {
-                                    talent_description = language_override.description_override;
-                                }
-                                // Check lore override
-                                if (language_override.lore_override) {
-                                    talent_lore = language_override.lore_override;
-                                }
-                            }
-                        }
-                    }
-                    // Talent name
-                    var talent_string = talent_classname + "_" + talent_counter;
-                    localization_content += talent_string + "\" \"" + talent_name + "\"";
-                    localization_content += "\n";
-                    // Talent description
-                    talent_description = this.TransformForLocalization(talent_description, false);
-                    localization_content += talent_string + "_Description\" \"" + talent_description + "\"";
-                    localization_content += "\n";
-                    // Talent lore
-                    localization_content += talent_string + "_Lore\" \"" + talent_lore + "\"";
-                    localization_content += "\n";
-                    // Increment talent counter
-                    talent_counter++;
-                }
-            }
-        }
+        // if (localized_data.TalentArray) {
+        //     for (const hero_talent_list of localized_data.TalentArray)
+        //     {
+        //         const talent_classname = `\t\t"DOTA_Tooltip_Ability_${hero_talent_list.talent_classname}`;
+        //         let talent_counter = 1;
+        //         for (const talent of hero_talent_list.talents)
+        //         {
+        //             let talent_name = talent.name;
+        //             let talent_description = talent.description;
+        //             let talent_lore = talent.lore;
+        //             if (talent.language_overrides)
+        //             {
+        //                 for (const language_override of talent.language_overrides)
+        //                 {
+        //                     // Only do overrides for the language that we're checking right now
+        //                     if (language_override.language === language)
+        //                     {
+        //                         // Check name override
+        //                         if (language_override.name_override)
+        //                         {
+        //                             talent_name = language_override.name_override;
+        //                         }
+        //                         // Check description override
+        //                         if (language_override.description_override)
+        //                         {
+        //                             talent_description = language_override.description_override;
+        //                         }
+        //                         // Check lore override
+        //                         if (language_override.lore_override)
+        //                         {
+        //                             talent_lore = language_override.lore_override;
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             // Talent name
+        //             const talent_string = `${talent_classname}_${talent_counter}`;
+        //             localization_content += `${talent_string}" "${talent_name}"`
+        //             localization_content += "\n";
+        //             // Talent description
+        //             talent_description = this.TransformForLocalization(talent_description, false);
+        //             localization_content += `${talent_string}_Description" "${talent_description}"`
+        //             localization_content += "\n";
+        //             // Talent lore
+        //             localization_content += `${talent_string}_Lore" "${talent_lore}"`
+        //             localization_content += "\n";
+        //             // Increment talent counter
+        //             talent_counter++;
+        //         }
+        //     }
+        // }
         // Go over modifiers
         if (localized_data.ModifierArray) {
-            for (var _s = 0, _t = localized_data.ModifierArray; _s < _t.length; _s++) {
-                var modifier = _t[_s];
+            for (var _k = 0, _l = localized_data.ModifierArray; _k < _l.length; _k++) {
+                var modifier = _l[_k];
                 var modifier_string = "\t\t\"DOTA_Tooltip_" + modifier.modifier_classname;
                 // Name
                 var modifier_name = modifier.name;
                 var modifier_description = modifier.description;
                 if (modifier.language_overrides) {
-                    for (var _u = 0, _v = modifier.language_overrides; _u < _v.length; _u++) {
-                        var language_override = _v[_u];
+                    for (var _m = 0, _o = modifier.language_overrides; _m < _o.length; _m++) {
+                        var language_override = _o[_m];
                         if (language_override.language === language) {
                             // Name overrides for a specific language, if necessary
                             if (language_override.name_override) {
@@ -310,7 +317,8 @@ var LocalizationCompiler = /** @class */ (function () {
         var localization_ending = '\t}\n}';
         var write_string = localization_intro + localization_content + localization_ending;
         // Write to the file
-        fs.writeFile(filepath, write_string, function () { console.log("Finished writing tooltips for language " + language + " in file " + filepath); });
+        var fileName = "addon_" + language.toString() + this.filepath_format;
+        fs.writeFile(filepath, write_string, function () { console.log("\x1b[36m%s\x1b[0m", "Finished writing tooltips for language " + language + " in file " + fileName); });
     };
     return LocalizationCompiler;
 }());

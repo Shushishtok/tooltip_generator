@@ -10,25 +10,28 @@ I heavily recommend using VSCode, not only because of its internal support of No
 
 # Installation Instructions
 * Install NodeJS.
-* Put `fsWatcher.ts`, `fsWatcher.js`, and `package.json` in project root
-* Put all resource files in /resource, where `addon_english.txt` resides
-* If you have a symlink or a irregular addon build, change all `/resource` paths to reach the `resource` folder, where `addon_<language>.txt` files reside. Change those in the `package.json` and in the `fsWatcher.ts` files.
-* Run `npm install` on project root.
-* Run `npx tsc .\fsWatcher.ts` on project root. Note that it needs to be the `.ts` file, not the `.js` one.
-* Navigate to your resource folder with `cd /resource`, or whichever path your `resource` folder is in.
-* Run `npx tsc`.
-* Run build task: `CTRL+SHIFT+B` on VSCode. If you're using Sublime follow the instructions below.
-* Test: in the resource folder, go to `/localization`, open `localizationData.ts`, change one or more characters in the localization, and save. The terminal should show updates, and addon_english should update with that change.
+* Install this module with `npm i @shushishtok/tooltip_generator` (please wait until you receive a message, that the adjustments are successful)
+* If your resource directory is NOT `/resource`, then you need to change the path in `package.json`: `"~resource": "YOUR_PATH/resource"`
+* Run `npm run init` to initialize the module
 
-# Running build task with Sublime:
-Credits to Nibuja for this part.
+# Build Instructions
+You have several ways to start the build command.
 
-Tools > Build System > New Build System...
+To test: in the resource folder, go to `resource/localization`, open `localizationData.ts`, change one or more characters in the localization, and save. The terminal should show updates, and addon_english should update with that change.
+
+## Running build task with console
+* Open your console and type `npm run dev`
+
+## Running build task with Visual Studio
+* Run build task: `CTRL+SHIFT+B` on VSCode
+
+## Running build task with Sublime:
+* Tools > Build System > New Build System...
+* Type:
 ```
 {
     "shell_cmd": "npm run dev"
 }
 ```
-
-Save as any name like `dota_ts.sublime-build`
-have `fsWatcher.ts` or `package.json` or any other file from the project open -> press Ctrl + Shift + B -> select `dota_ts` -> console opens and it is run, is closed with esc, will still continue to compile everything until sublime is closed.
+* Save as any name like `dota_ts.sublime-build`
+* Have `fsWatcher.ts` or `package.json` or any other file from the project open -> press Ctrl + Shift + B -> select `dota_ts` -> console opens and it is run, is closed with esc, will still continue to compile everything until sublime is closed.

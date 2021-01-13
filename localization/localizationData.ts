@@ -1,4 +1,4 @@
-import { AbilityLocalization, Language, LocalizationData, ModifierLocalization, StandardLocalization } from "../localizationInterfaces";
+import { AbilityLocalization, Language, LocalizationData, ModifierLocalization, StandardLocalization } from "~generator/localizationInterfaces";
 
 export function GenerateLocalizationData(): LocalizationData
 {
