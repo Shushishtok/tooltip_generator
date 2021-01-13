@@ -1,27 +1,31 @@
 import * as fs from 'fs';
-import { LocalizationCompiler } from './resource/localizationCompiler';
-import { LocalizationData} from './resource/localizationInterfaces';
+import { LocalizationCompiler } from './localizationCompiler';
+import { LocalizationData} from './localizationInterfaces';
 const watch = require("node-watch");
 
 let completeData: {[path: string]: LocalizationData} = {};
+const resourcePath = "node_modules/~resource";
+const generatorPath = "node_modules/~generator";
 
-let watcher = watch(["./resource/localization", "./resource/localizationCompiler.js"], {recursive: true})
+console.log(fs.realpathSync(generatorPath));
+
+let watcher = watch([resourcePath + "/localization", generatorPath + "/localizationCompiler.js"], {recursive: true})
 watcher.on("change", (eventType ?: 'update' | 'remove' | undefined, filePath ?: string) => {
 	if (!filePath) return;
 	if (filePath.includes("localizationCompiler.js")) {
 		compiler = loadCompiler();
 	}
-	let match = /(.*[\/|\\](\w+)).js/g.exec(filePath);
+	let match = /(node_modules[\\/])?(.*[\/|\\](\w+)).js/g.exec(filePath);
 	if (eventType == "update" && filePath && match) {
-		const curpath = match[1];
-		const data = getDataFromFile(".\\" + curpath + ".js");
+		const curpath = match[2];
+		const data = getDataFromFile(curpath + ".js");
 		if (data) {
 			completeData[curpath] = data;
 			combineData();
 		}
 	} else if (eventType == "remove" && match) {
-		if (completeData.hasOwnProperty(match[1])) {
-			delete completeData[match[1]];
+		if (completeData.hasOwnProperty(match[2])) {
+			delete completeData[match[2]];
 			combineData();
 		}
 	}
@@ -29,18 +33,18 @@ watcher.on("change", (eventType ?: 'update' | 'remove' | undefined, filePath ?: 
 
 // not really neccessarry:
 watcher.on("error", (error: Error) => {
-	console.log("Something went wrong!");
+	console.log("\x1b[31m%s\x1b[0m", "Something went wrong!");
 	console.log(error);
 })
 
 watcher.on("ready", () => {
-	console.log("Ready!");
+	console.log("\x1b[32m%s\x1b[0m", "Ready!");
 })
 
 let compiler = loadCompiler();
 
 function getDataFromFile(filePath: string): LocalizationData | undefined {
-	if (!fs.existsSync(filePath)){
+	if (!fs.existsSync("node_modules/" + filePath)){
 		return;
 	}
 	delete require.cache[require.resolve(filePath)]
@@ -59,8 +63,8 @@ function combineData() {
 function loadCompiler(): LocalizationCompiler
 {
     // Clear require cache
-    delete require.cache[require.resolve("./resource/localizationCompiler")]
+    delete require.cache[require.resolve("~generator/localizationCompiler")]
     // Require latest compiler version
-    const compilerClass: new () => LocalizationCompiler = require("./resource/localizationCompiler").LocalizationCompiler;
+    const compilerClass: new () => LocalizationCompiler = require("~generator/localizationCompiler").LocalizationCompiler;
     return new compilerClass();
 }

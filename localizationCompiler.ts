@@ -5,7 +5,7 @@ import { LocalizationData, Language, AbilityLocalization, ModifierLocalization, 
 
 export class LocalizationCompiler
 {
-    addon_filepath: string = path.join(__dirname, "addon_");
+    addon_filepath: string = path.join("node_modules/~resource", "addon_");
     filepath_format: string = ".txt";
 
     // Helper functions
@@ -23,7 +23,7 @@ export class LocalizationCompiler
 
     OnLocalizationDataChanged(allData: {[path: string]: LocalizationData})
     {
-        console.log("Localization event fired");
+        // console.log("Localization event fired");
         let Abilities: Array<AbilityLocalization> = new Array<AbilityLocalization>();
         let Modifiers: Array<ModifierLocalization> = new Array<ModifierLocalization>();
         let StandardTooltips: Array<StandardLocalization> = new Array<StandardLocalization>();
@@ -52,7 +52,7 @@ export class LocalizationCompiler
             // }
         }
 
-        console.log("Localization data generated");
+        // console.log("Localization data generated");
 
         // Generate information for every language
         const languages = Object.values(Language).filter(v => typeof v !== "number");
@@ -378,6 +378,6 @@ export class LocalizationCompiler
         let write_string = localization_intro + localization_content + localization_ending;
 
         // Write to the file
-        fs.writeFile(filepath, write_string, ()=>{console.log(`Finished writing tooltips for language ${language} in file ${filepath}`)});
+        fs.writeFile(filepath, write_string, ()=>{console.log("\x1b[36m%s\x1b[0m", `Finished writing tooltips for language ${language} in file ${filepath}`)});
     }
 }
