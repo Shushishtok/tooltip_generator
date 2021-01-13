@@ -378,6 +378,7 @@ export class LocalizationCompiler
         let write_string = localization_intro + localization_content + localization_ending;
 
         // Write to the file
-        fs.writeFile(filepath, write_string, ()=>{console.log("\x1b[36m%s\x1b[0m", `Finished writing tooltips for language ${language} in file ${filepath}`)});
+        let fileName = "addon_" + language.toString() + this.filepath_format;
+        fs.writeFile(filepath, write_string, ()=>{console.log("\x1b[36m%s\x1b[0m", `Finished writing tooltips for language ${language} in file ${fileName}`)});
     }
 }

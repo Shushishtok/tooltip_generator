@@ -97,7 +97,7 @@ function CheckPackage() {
             goalPackage._moduleAliases["~resource"] = "resource";
         }
         if (!hasGenerator) {
-            goalPackage._moduleAliases["~generator"] = "node_modules/@shushishtok/tooltip_generato";
+            goalPackage._moduleAliases["~generator"] = "node_modules/@shushishtok/tooltip_generator";
         }
         console.log("Creating backup of package.json...");
         fs.copyFileSync(rootPath + "package.json", rootPath + "backup_package.json");
@@ -113,11 +113,11 @@ function CheckPackage() {
             fs.copyFileSync(copyPackage, rootPath + "package.json");
         }
         else {
-            console.log("\x1b[31m%s\x1b[0m", "\nCouldn't find _package.json! How you installed this module correctly?");
+            console.log("\x1b[31m%s\x1b[0m", "\nCouldn't find _package.json! Have you installed this module correctly?");
             return;
         }
     }
-    console.log("Final install...");
+    console.log("Running final installation, please wait for the success message...");
     child.exec("npm install", {
         cwd: rootPath,
     }, function (err, stdout) {
