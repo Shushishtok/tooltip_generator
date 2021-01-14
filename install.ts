@@ -4,6 +4,8 @@ import * as child from 'child_process';
 interface packageSnippet {
 	scripts?: {[name: string]: string};
 	_moduleAliases?: {[name: string]: string};
+	dependencies?: {[name: string]: string};
+	devDependencies?: {[name: string]: string};
 }
 
 // define package insertions
@@ -84,6 +86,31 @@ function CheckPackage() {
 		}
 		if (!hasGenerator) {
 			goalPackage._moduleAliases["~generator"] = "node_modules/@shushishtok/tooltip_generator";
+		}
+
+		const origPackagePath = scriptPath + "package.json";
+		if (fs.existsSync(origPackagePath)) {
+			const origPackageRaw = fs.readFileSync(scriptPath + "package.json");
+			const origPackage = JSON.parse(origPackageRaw.toString()) as packageSnippet;
+
+			if (!goalPackage.dependencies) {
+				goalPackage.dependencies = {};
+			}
+			if (!goalPackage.devDependencies) {
+				goalPackage.devDependencies = {};
+			}
+			origPackage.dependencies!["@shushishtok/tooltip_generator"] = "latest"
+
+			for (const name in origPackage.devDependencies!) {
+				if (!goalPackage.devDependencies.hasOwnProperty(name) && !goalPackage.dependencies.hasOwnProperty(name)) {
+					goalPackage.devDependencies[name] = origPackage.devDependencies[name];
+				}
+			}
+			for (const name in origPackage.dependencies!) {
+				if (!goalPackage.dependencies.hasOwnProperty(name) && !goalPackage.devDependencies.hasOwnProperty(name)) {
+					goalPackage.dependencies[name] = origPackage.dependencies[name];
+				}
+			}
 		}
 
 		console.log("Creating backup of package.json...");

@@ -99,6 +99,28 @@ function CheckPackage() {
         if (!hasGenerator) {
             goalPackage._moduleAliases["~generator"] = "node_modules/@shushishtok/tooltip_generator";
         }
+        var origPackagePath = scriptPath + "package.json";
+        if (fs.existsSync(origPackagePath)) {
+            var origPackageRaw = fs.readFileSync(scriptPath + "package.json");
+            var origPackage = JSON.parse(origPackageRaw.toString());
+            if (!goalPackage.dependencies) {
+                goalPackage.dependencies = {};
+            }
+            if (!goalPackage.devDependencies) {
+                goalPackage.devDependencies = {};
+            }
+            origPackage.dependencies["@shushishtok/tooltip_generator"] = "latest";
+            for (var name_4 in origPackage.devDependencies) {
+                if (!goalPackage.devDependencies.hasOwnProperty(name_4) && !goalPackage.dependencies.hasOwnProperty(name_4)) {
+                    goalPackage.devDependencies[name_4] = origPackage.devDependencies[name_4];
+                }
+            }
+            for (var name_5 in origPackage.dependencies) {
+                if (!goalPackage.dependencies.hasOwnProperty(name_5) && !goalPackage.devDependencies.hasOwnProperty(name_5)) {
+                    goalPackage.dependencies[name_5] = origPackage.dependencies[name_5];
+                }
+            }
+        }
         console.log("Creating backup of package.json...");
         fs.copyFileSync(rootPath + "package.json", rootPath + "backup_package.json");
         console.log("Adjusting package.json...");
