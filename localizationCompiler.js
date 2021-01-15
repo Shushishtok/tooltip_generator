@@ -68,8 +68,10 @@ var LocalizationCompiler = /** @class */ (function () {
         var languages = Object.values(localizationInterfaces_1.Language).filter(function (v) { return typeof v !== "number"; });
         for (var _c = 0, languages_1 = languages; _c < languages_1.length; _c++) {
             var language = languages_1[_c];
-            var localization_content = this.GenerateContentStringForLanguage(language, localization_info);
-            this.WriteContentToAddonFile(language, localization_content);
+            if (language != localizationInterfaces_1.Language.None) {
+                var localization_content = this.GenerateContentStringForLanguage(language, localization_info);
+                this.WriteContentToAddonFile(language, localization_content);
+            }
         }
     };
     LocalizationCompiler.prototype.GenerateContentStringForLanguage = function (language, localized_data) {

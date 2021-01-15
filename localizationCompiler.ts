@@ -56,7 +56,7 @@ export class LocalizationCompiler
         // Generate information for every language
         const languages = Object.values(Language).filter(v => typeof v !== "number");
         for (const language of languages)
-        {
+        {            
             if (language != Language.None)
             {
                 const localization_content: string = this.GenerateContentStringForLanguage(language, localization_info);

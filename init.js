@@ -28,6 +28,11 @@ function copyFiles() {
         var resultPath = resourcePath + "/tsconfig.json";
         fs.copyFileSync(filePath, resultPath);
     }
+    filePath = __dirname + "/ModifierProperties.d.ts";
+    if (fs.existsSync(filePath) && fs.existsSync(resourcePath)) {
+        var resultPath = resourcePath + "/ModifierProperties.d.ts";
+        fs.copyFileSync(filePath, resultPath);
+    }
     var dirPath = __dirname + "/localization";
     if (fs.existsSync(filePath) && fs.existsSync(resourcePath)) {
         var resultPath = resourcePath + "/localization";
