@@ -57,8 +57,11 @@ export class LocalizationCompiler
         const languages = Object.values(Language).filter(v => typeof v !== "number");
         for (const language of languages)
         {
-            const localization_content: string = this.GenerateContentStringForLanguage(language, localization_info);
-            this.WriteContentToAddonFile(language, localization_content);
+            if (language != Language.None)
+            {
+                const localization_content: string = this.GenerateContentStringForLanguage(language, localization_info);
+                this.WriteContentToAddonFile(language, localization_content);
+            }
         }
     }
 
