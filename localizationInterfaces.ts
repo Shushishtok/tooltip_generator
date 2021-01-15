@@ -1,5 +1,6 @@
 export enum Language
 {
+    None = 'none',
     English = 'english',
     German = "german",
     Russian = "russian",
@@ -9,8 +10,8 @@ export enum Language
 export interface AbilityLocalization
 {
     ability_classname: string;
-    name: string;
-    description: string;
+    name?: string;
+    description?: string;
     scepter_description?: string;
     shard_description?: string;
     lore?: string;
@@ -36,8 +37,8 @@ export interface AbilityLocalizationContent
 export interface ModifierLocalization
 {
     modifier_classname: string;
-    name: string;
-    description: string;
+    name?: string;
+    description?: string;
     language_overrides?: Array<ModifierLocalizationContent>;
 }
 

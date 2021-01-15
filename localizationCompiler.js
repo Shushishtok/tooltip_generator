@@ -22,7 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalizationCompiler = void 0;
 var fs = __importStar(require("fs"));
 var path = __importStar(require("path"));
-// import { GenerateLocalizationData } from "./localizationData";
 var localizationInterfaces_1 = require("./localizationInterfaces");
 var LocalizationCompiler = /** @class */ (function () {
     function LocalizationCompiler() {
@@ -149,12 +148,16 @@ var LocalizationCompiler = /** @class */ (function () {
                     }
                 }
                 // Add name localization
-                localization_content += ability_string + "\" \"" + ability_name + "\"";
-                localization_content += "\n";
+                if (ability_name) {
+                    localization_content += ability_string + "\" \"" + ability_name + "\"";
+                    localization_content += "\n";
+                }
                 // Add description localization
-                ability_description = this.TransformForLocalization(ability_description, false);
-                localization_content += ability_string + "_description\" \"" + ability_description + "\"";
-                localization_content += "\n";
+                if (ability_description) {
+                    ability_description = this.TransformForLocalization(ability_description, false);
+                    localization_content += ability_string + "_description\" \"" + ability_description + "\"";
+                    localization_content += "\n";
+                }
                 // // Reimagined effects, if any
                 // if (reimagined_effects)
                 // {
@@ -295,12 +298,16 @@ var LocalizationCompiler = /** @class */ (function () {
                     }
                 }
                 // Add name to localization string
-                localization_content += modifier_string + "\" \"" + modifier_name + "\"";
-                localization_content += "\n";
+                if (modifier_name) {
+                    localization_content += modifier_string + "\" \"" + modifier_name + "\"";
+                    localization_content += "\n";
+                }
                 // Add description to localization string
-                modifier_description = this.TransformForLocalization(modifier_description, true);
-                localization_content += modifier_string + "_description\" \"" + modifier_description + "\"";
-                localization_content += "\n";
+                if (modifier_description) {
+                    modifier_description = this.TransformForLocalization(modifier_description, true);
+                    localization_content += modifier_string + "_description\" \"" + modifier_description + "\"";
+                    localization_content += "\n";
+                }
             }
         }
         return localization_content;

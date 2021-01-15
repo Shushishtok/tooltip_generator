@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path'
-// import { GenerateLocalizationData } from "./localizationData";
 import { LocalizationData, Language, AbilityLocalization, ModifierLocalization, StandardLocalization } from "./localizationInterfaces";
 
 export class LocalizationCompiler
@@ -68,7 +67,8 @@ export class LocalizationCompiler
         let localization_content = "";
 
         // Go over standard tooltips
-        if (localized_data.StandardArray) {
+        if (localized_data.StandardArray) 
+        {
             for (const standardLocalization of localized_data.StandardArray)
             {
                 // Check for name override for the language we're checking
@@ -91,7 +91,8 @@ export class LocalizationCompiler
         }
 
         // Go over abilities for this language
-        if (localized_data.AbilityArray) {
+        if (localized_data.AbilityArray) 
+        {
             for (const ability of localized_data.AbilityArray)
             {
                 // Class name is identical for all languages, so we would always use it
@@ -165,13 +166,19 @@ export class LocalizationCompiler
                 }
 
                 // Add name localization
-                localization_content += `${ability_string}" "${ability_name}"`;
-                localization_content += "\n";
+                if (ability_name)
+                {
+                    localization_content += `${ability_string}" "${ability_name}"`;
+                    localization_content += "\n";
+                }
 
                 // Add description localization
-                ability_description = this.TransformForLocalization(ability_description, false);
-                localization_content += `${ability_string}_description" "${ability_description}"`;
-                localization_content += "\n";
+                if (ability_description)
+                {
+                    ability_description = this.TransformForLocalization(ability_description, false);
+                    localization_content += `${ability_string}_description" "${ability_description}"`;
+                    localization_content += "\n";
+                }
 
                 // // Reimagined effects, if any
                 // if (reimagined_effects)
@@ -348,13 +355,19 @@ export class LocalizationCompiler
                 }
 
                 // Add name to localization string
-                localization_content += `${modifier_string}" "${modifier_name}"`;
-                localization_content += "\n";
+                if (modifier_name)
+                {
+                    localization_content += `${modifier_string}" "${modifier_name}"`;
+                    localization_content += "\n";
+                }
 
                 // Add description to localization string
-                modifier_description = this.TransformForLocalization(modifier_description, true);
-                localization_content += `${modifier_string}_description" "${modifier_description}"`;
-                localization_content += "\n";
+                if (modifier_description)
+                {
+                    modifier_description = this.TransformForLocalization(modifier_description, true);
+                    localization_content += `${modifier_string}_description" "${modifier_description}"`;
+                    localization_content += "\n";
+                }
             }
         }
 
