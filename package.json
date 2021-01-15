@@ -43,6 +43,7 @@
     "dev": "run-p dev:*",
     "dev:localizationCompiler": "tsc --project node_modules/~resource/tsconfig.json",
     "dev:localizationCompilerWatcher": "tsc --project node_modules/~resource/tsconfig.json --watch",
+    "dev:localizationGeneratorWatcher": "tsc --project node_modules/~generator/tsconfig.json",
     "dev:runlocalizationWatcher": "node node_modules/~generator/fsWatcher.js",
     "init": "link-module-alias && node node_modules/~generator/init.js"
   },
