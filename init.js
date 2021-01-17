@@ -13,7 +13,7 @@ function copyFiles() {
             fs.copyFileSync(filePath, resultPath);
             console.log("tsconfig.json copied to " + resultPath + " folder");
         }
-        filePath = __dirname + "node_modules/@shushishtok/tooltip_generator/ModifierProperties.d.ts";
+        filePath = __dirname + "/ModifierProperties.d.ts";
         console.log("Checking if ModifierProperties.d.ts exists in " + filePath);
         if (fs.existsSync(filePath)) {
             console.log("ModifierProperties.d.ts found!");
