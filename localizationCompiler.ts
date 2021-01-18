@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path'
+import { KVObject, serialize } from 'valve-kv'
 import { LocalizationData, Language, AbilityLocalization, ModifierLocalization, StandardLocalization } from "./localizationInterfaces";
 
 export class LocalizationCompiler
@@ -12,11 +13,22 @@ export class LocalizationCompiler
     {
         if (modifier)
         {
-            return text.replace(/\{([^f]\w+)\}($|[^%])/g, "%d$1%$2").replace(/\{([^f]\w+)\}%/g, "%d$1%%%").replace(/\{f(\w+)\}($|[^%])/g, "%f$1%$2").replace(/\{f(\w+)\}%/g, "%f$1%%%");
+            text = text.replace(/\{([^f]\w+)\}($|[^%])/g, "%d$1%$2")
+            text = text.replace(/\{([^f]\w+)\}%/g, "%d$1%%%")
+            text = text.replace(/\{f(\w+)\}($|[^%])/g, "%f$1%$2")
+            text = text.replace(/\{f(\w+)\}%/g, "%f$1%%%");
+            text = text.replace(/%\{([^f]\w+)\}/g, "%%%d$1%")
+            text = text.replace(/%\{f(\w+)\}/g, "%%%f$1%");
+
+            return text;
         }
         else
         {
-            return text.replace(/\${(\w*)}($|[^%])/g, "%$1%$2").replace(/\${(\w*)}%/g, "%$1%%%");
+            text = text.replace(/\${(\w*)}($|[^%])/g, "%$1%$2")
+            text = text.replace(/\${(\w*)}%/g, "%$1%%%");
+            text = text.replace(/%\${(\w*)}/g, "%%%$1%");
+            
+            return text;
         }
     }
 
@@ -59,19 +71,18 @@ export class LocalizationCompiler
         {            
             if (language != Language.None)
             {
-                const localization_content: string = this.GenerateContentStringForLanguage(language, localization_info);
-                this.WriteContentToAddonFile(language, localization_content);
+                const tokens: KVObject = this.GenerateContentStringForLanguage(language, localization_info);
+                this.WriteContentToAddonFile(language, tokens);
             }
         }
     }
 
-    GenerateContentStringForLanguage(language: string, localized_data: LocalizationData): string
+    GenerateContentStringForLanguage(language: string, localized_data: LocalizationData): KVObject
     {
-        let localization_content = "";
+        let tokens: KVObject = {}
 
         // Go over standard tooltips
-        if (localized_data.StandardArray) 
-        {
+        if (localized_data.StandardArray) {
             for (const standardLocalization of localized_data.StandardArray)
             {
                 // Check for name override for the language we're checking
@@ -88,18 +99,18 @@ export class LocalizationCompiler
                     }
                 }
 
-                localization_content += `\t\t"${standardLocalization.classname}" "${standard_tooltip_string}"`;
-                localization_content += "\n";
+                tokens[standardLocalization.classname] = standard_tooltip_string;
+                // localization_content += `\t\t"${standardLocalization.classname}" "${standard_tooltip_string}"`;
+                // localization_content += "\n";
             }
         }
 
         // Go over abilities for this language
-        if (localized_data.AbilityArray) 
-        {
+        if (localized_data.AbilityArray) {
             for (const ability of localized_data.AbilityArray)
             {
                 // Class name is identical for all languages, so we would always use it
-                const ability_string = `\t\t"DOTA_Tooltip_Ability_${ability.ability_classname}`;
+                const ability_string = `DOTA_Tooltip_Ability_${ability.ability_classname}`;
 
                 // Name
                 let ability_name = ability.name;
@@ -130,10 +141,10 @@ export class LocalizationCompiler
                             }
 
                             // Check for reimagined effect overrides
-                            // if (language_override.reimagined_effects_override)
-                            // {
-                            //     reimagined_effects = language_override.reimagined_effects_override;
-                            // }
+                            //if (language_override.reimagined_effects_override)
+                            //{
+                                //reimagined_effects = language_override.reimagined_effects_override;
+                            //}
 
                             // Check for lore override
                             if (language_override.lore_override)
@@ -171,32 +182,32 @@ export class LocalizationCompiler
                 // Add name localization
                 if (ability_name)
                 {
-                    localization_content += `${ability_string}" "${ability_name}"`;
-                    localization_content += "\n";
-                }
+                    tokens[ability_string] = ability_name;
+                }                
 
                 // Add description localization
                 if (ability_description)
                 {
                     ability_description = this.TransformForLocalization(ability_description, false);
-                    localization_content += `${ability_string}_description" "${ability_description}"`;
-                    localization_content += "\n";
-                }
+                    tokens[`${ability_string}_description`] = ability_description;
+                }                
 
-                // // Reimagined effects, if any
+                // Reimagined effects, if any
                 // if (reimagined_effects)
                 // {
                 //     let counter = 1;
                 //     for (const reimagined_effect of reimagined_effects)
                 //     {
                 //         // Reimagined title
-                //         localization_content += `${ability_string}_rmg_title_${counter}" "${reimagined_effect.title}"`;
-                //         localization_content += "\n";
+                //         tokens[`${ability_string}_rmg_title_${counter}`] = reimagined_effect.title;
+                //         // localization_content += `${ability_string}_rmg_title_${counter}" "${reimagined_effect.title}"`;
+                //         // localization_content += "\n";
 
                 //         // Reimagined description
                 //         const reimagined_effect_description = this.TransformForLocalization(reimagined_effect.description, false);
-                //         localization_content += `${ability_string}_rmg_description_${counter}" "${reimagined_effect_description}"`;
-                //         localization_content += "\n";
+                //         tokens[`${ability_string}_rmg_description_${counter}`] = reimagined_effect_description;
+                //         // localization_content += `${ability_string}_rmg_description_${counter}" "${reimagined_effect_description}"`;
+                //         // localization_content += "\n";
 
                 //         counter++;
                 //     }
@@ -206,8 +217,7 @@ export class LocalizationCompiler
                 if (ability_lore)
                 {
                     const transformed_lore = this.TransformForLocalization(ability_lore, false);
-                    localization_content += `${ability_string}_Lore" "${transformed_lore}"`;
-                    localization_content += "\n";
+                    tokens[`${ability_string}_Lore`] = transformed_lore;                    
                 }
 
                 // Notes, if any
@@ -217,8 +227,7 @@ export class LocalizationCompiler
                     for (const note of ability_notes)
                     {
                         const transformed_note = this.TransformForLocalization(note, false);
-                        localization_content += `${ability_string}_Note${counter}" "${transformed_note}"`;
-                        localization_content += "\n";
+                        tokens[`${ability_string}_Note${counter}`] = transformed_note;                        
 
                         counter++;
                     }
@@ -228,16 +237,14 @@ export class LocalizationCompiler
                 if (scepter_description)
                 {
                     const ability_scepter_description = this.TransformForLocalization(scepter_description, false);
-                    localization_content += `${ability_string}_scepter_description" "${ability_scepter_description}"`;
-                    localization_content += "\n";
+                    tokens[`${ability_string}_scepter_description`] = ability_scepter_description;                    
                 }
 
                 // Shard, if any
                 if (shard_description)
                 {
                     const ability_shard_description = this.TransformForLocalization(shard_description, false);
-                    localization_content += `${ability_string}_shard_description" "${ability_shard_description}"`;
-                    localization_content += "\n";
+                    tokens[`${ability_string}_shard_description`] = ability_shard_description;                    
                 }
 
                 // Ability specials, if any
@@ -258,8 +265,8 @@ export class LocalizationCompiler
                         }
 
                         ability_special_text += ability_special.text;
-                        localization_content += `${ability_string}_${ability_special.ability_special}" "${ability_special_text}:"`;
-                        localization_content += "\n";
+
+                        tokens[`${ability_string}_${ability_special.ability_special}`] = ability_special_text;                        
                     }
                 }
             }
@@ -308,17 +315,20 @@ export class LocalizationCompiler
 
         //             // Talent name
         //             const talent_string = `${talent_classname}_${talent_counter}`;
-        //             localization_content += `${talent_string}" "${talent_name}"`
-        //             localization_content += "\n";
+        //             tokens[talent_string] = talent_name;
+        //             // localization_content += `${talent_string}" "${talent_name}"`
+        //             // localization_content += "\n";
 
         //             // Talent description
         //             talent_description = this.TransformForLocalization(talent_description, false);
-        //             localization_content += `${talent_string}_Description" "${talent_description}"`
-        //             localization_content += "\n";
+        //             tokens[`${talent_string}_Description`] = talent_description;
+        //             // localization_content += `${talent_string}_Description" "${talent_description}"`
+        //             // localization_content += "\n";
 
         //             // Talent lore
-        //             localization_content += `${talent_string}_Lore" "${talent_lore}"`
-        //             localization_content += "\n";
+        //             tokens[`${talent_string}_Lore`] = talent_lore;
+        //             // localization_content += `${talent_string}_Lore" "${talent_lore}"`
+        //             // localization_content += "\n";
 
         //             // Increment talent counter
         //             talent_counter++;
@@ -330,7 +340,7 @@ export class LocalizationCompiler
         if (localized_data.ModifierArray) {
             for (const modifier of localized_data.ModifierArray)
             {
-                const modifier_string = `\t\t"DOTA_Tooltip_${modifier.modifier_classname}`;
+                const modifier_string = `DOTA_Tooltip_${modifier.modifier_classname}`;
 
                 // Name
                 let modifier_name = modifier.name;
@@ -360,24 +370,22 @@ export class LocalizationCompiler
                 // Add name to localization string
                 if (modifier_name)
                 {
-                    localization_content += `${modifier_string}" "${modifier_name}"`;
-                    localization_content += "\n";
-                }
+                    tokens[modifier_string] = modifier_name;
+                }                
 
                 // Add description to localization string
                 if (modifier_description)
                 {
                     modifier_description = this.TransformForLocalization(modifier_description, true);
-                    localization_content += `${modifier_string}_description" "${modifier_description}"`;
-                    localization_content += "\n";
-                }
+                    tokens[`${modifier_string}_description`] = modifier_description;
+                }                
             }
         }
 
-        return localization_content;
+        return tokens;
     }
 
-    WriteContentToAddonFile(language: string, localization_content: string)
+    WriteContentToAddonFile(language: string, tokens: KVObject)
     {
         // Set based on language
         const filepath = this.addon_filepath + language.toString() + this.filepath_format;
@@ -386,15 +394,13 @@ export class LocalizationCompiler
         const fd = fs.openSync(filepath, 'w');
         fs.closeSync(fd);
 
-        // Add the opening tokens
-        let localization_intro = `"lang"\n{\n\t"Language" "${language}"\n\t"Tokens"\n\t{\n`;
+        // Add the opening tokens        
+        const kv = {lang: { Language: language, Tokens: tokens}}
 
-        // Add the closing token
-        let localization_ending = '\t}\n}';
-        let write_string = localization_intro + localization_content + localization_ending;
+        // Serialize!        
+        let write_string = serialize(kv);
 
         // Write to the file
-        let fileName = "addon_" + language.toString() + this.filepath_format;
-        fs.writeFile(filepath, write_string, ()=>{console.log("\x1b[36m%s\x1b[0m", `Finished writing tooltips for language ${language} in file ${fileName}`)});
+        fs.writeFile(filepath, write_string, ()=>{console.log(`Finished writing tooltips for language ${language} in file ${filepath}`)});
     }
 }
