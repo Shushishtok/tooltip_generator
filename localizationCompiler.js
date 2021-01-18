@@ -54,7 +54,6 @@ var LocalizationCompiler = /** @class */ (function () {
             //     Array.prototype.push.apply(Talents, data.TalentArray);
             // }
         }
-        // console.log("Localization data generated");
         // Generate information for every language
         var languages = Object.values(localizationInterfaces_1.Language).filter(function (v) { return typeof v !== "number"; });
         for (var _c = 0, languages_1 = languages; _c < languages_1.length; _c++) {
@@ -82,8 +81,6 @@ var LocalizationCompiler = /** @class */ (function () {
                     }
                 }
                 tokens[standardLocalization.classname] = standard_tooltip_string;
-                // localization_content += `\t\t"${standardLocalization.classname}" "${standard_tooltip_string}"`;
-                // localization_content += "\n";
             }
         }
         // Go over abilities for this language
@@ -157,14 +154,10 @@ var LocalizationCompiler = /** @class */ (function () {
                 //     for (const reimagined_effect of reimagined_effects)
                 //     {
                 //         // Reimagined title
-                //         tokens[`${ability_string}_rmg_title_${counter}`] = reimagined_effect.title;
-                //         // localization_content += `${ability_string}_rmg_title_${counter}" "${reimagined_effect.title}"`;
-                //         // localization_content += "\n";
+                //         tokens[`${ability_string}_rmg_title_${counter}`] = reimagined_effect.title;                
                 //         // Reimagined description
                 //         const reimagined_effect_description = this.TransformForLocalization(reimagined_effect.description, false);
-                //         tokens[`${ability_string}_rmg_description_${counter}`] = reimagined_effect_description;
-                //         // localization_content += `${ability_string}_rmg_description_${counter}" "${reimagined_effect_description}"`;
-                //         // localization_content += "\n";
+                //         tokens[`${ability_string}_rmg_description_${counter}`] = reimagined_effect_description;                
                 //         counter++;
                 //     }
                 // }
@@ -249,18 +242,12 @@ var LocalizationCompiler = /** @class */ (function () {
         //             }
         //             // Talent name
         //             const talent_string = `${talent_classname}_${talent_counter}`;
-        //             tokens[talent_string] = talent_name;
-        //             // localization_content += `${talent_string}" "${talent_name}"`
-        //             // localization_content += "\n";
+        //             tokens[talent_string] = talent_name;       
         //             // Talent description
         //             talent_description = this.TransformForLocalization(talent_description, false);
-        //             tokens[`${talent_string}_Description`] = talent_description;
-        //             // localization_content += `${talent_string}_Description" "${talent_description}"`
-        //             // localization_content += "\n";
+        //             tokens[`${talent_string}_Description`] = talent_description;        
         //             // Talent lore
-        //             tokens[`${talent_string}_Lore`] = talent_lore;
-        //             // localization_content += `${talent_string}_Lore" "${talent_lore}"`
-        //             // localization_content += "\n";
+        //             tokens[`${talent_string}_Lore`] = talent_lore;        
         //             // Increment talent counter
         //             talent_counter++;
         //         }

@@ -63,8 +63,6 @@ export class LocalizationCompiler
             // }
         }
 
-        // console.log("Localization data generated");
-
         // Generate information for every language
         const languages = Object.values(Language).filter(v => typeof v !== "number");
         for (const language of languages)
@@ -99,9 +97,7 @@ export class LocalizationCompiler
                     }
                 }
 
-                tokens[standardLocalization.classname] = standard_tooltip_string;
-                // localization_content += `\t\t"${standardLocalization.classname}" "${standard_tooltip_string}"`;
-                // localization_content += "\n";
+                tokens[standardLocalization.classname] = standard_tooltip_string;                
             }
         }
 
@@ -199,15 +195,11 @@ export class LocalizationCompiler
                 //     for (const reimagined_effect of reimagined_effects)
                 //     {
                 //         // Reimagined title
-                //         tokens[`${ability_string}_rmg_title_${counter}`] = reimagined_effect.title;
-                //         // localization_content += `${ability_string}_rmg_title_${counter}" "${reimagined_effect.title}"`;
-                //         // localization_content += "\n";
+                //         tokens[`${ability_string}_rmg_title_${counter}`] = reimagined_effect.title;                
 
                 //         // Reimagined description
                 //         const reimagined_effect_description = this.TransformForLocalization(reimagined_effect.description, false);
-                //         tokens[`${ability_string}_rmg_description_${counter}`] = reimagined_effect_description;
-                //         // localization_content += `${ability_string}_rmg_description_${counter}" "${reimagined_effect_description}"`;
-                //         // localization_content += "\n";
+                //         tokens[`${ability_string}_rmg_description_${counter}`] = reimagined_effect_description;                
 
                 //         counter++;
                 //     }
@@ -315,20 +307,14 @@ export class LocalizationCompiler
 
         //             // Talent name
         //             const talent_string = `${talent_classname}_${talent_counter}`;
-        //             tokens[talent_string] = talent_name;
-        //             // localization_content += `${talent_string}" "${talent_name}"`
-        //             // localization_content += "\n";
+        //             tokens[talent_string] = talent_name;       
 
         //             // Talent description
         //             talent_description = this.TransformForLocalization(talent_description, false);
-        //             tokens[`${talent_string}_Description`] = talent_description;
-        //             // localization_content += `${talent_string}_Description" "${talent_description}"`
-        //             // localization_content += "\n";
+        //             tokens[`${talent_string}_Description`] = talent_description;        
 
         //             // Talent lore
-        //             tokens[`${talent_string}_Lore`] = talent_lore;
-        //             // localization_content += `${talent_string}_Lore" "${talent_lore}"`
-        //             // localization_content += "\n";
+        //             tokens[`${talent_string}_Lore`] = talent_lore;        
 
         //             // Increment talent counter
         //             talent_counter++;
