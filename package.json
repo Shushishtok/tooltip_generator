@@ -48,5 +48,5 @@
     "dev:runlocalizationWatcher": "node node_modules/~generator/fsWatcher.js",
     "init": "link-module-alias && node node_modules/~generator/init.js"
   },
-  "version": "1.4.2"
+  "version": "1.4.3"
 }
