@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path'
 import { KVObject, serialize } from 'valve-kv'
-import { LocalizationData, Language, AbilityLocalization, ModifierLocalization, StandardLocalization } from "./localizationInterfaces";
+import { LocalizationData, AbilityLocalization, ModifierLocalization, StandardLocalization } from "./localizationInterfaces";
+import { Language } from "./languages"
 
 export class LocalizationCompiler
 {
@@ -24,9 +25,9 @@ export class LocalizationCompiler
         }
         else
         {
-            text = text.replace(/\${(\w*)}($|[^%])/g, "%$1%$2")
-            text = text.replace(/\${(\w*)}%/g, "%$1%%%");
-            text = text.replace(/%\${(\w*)}/g, "%%%$1%");
+            text = text.replace(/\{(\w*)}($|[^%])/g, "%$1%$2")
+            text = text.replace(/\{(\w*)}%/g, "%$1%%%");
+            text = text.replace(/%\{(\w*)}/g, "%%%$1%");
             
             return text;
         }

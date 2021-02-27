@@ -4,14 +4,14 @@ function copyFiles() {
 	console.log("Copying initial files...");
 	const resourcePath = "node_modules/~resource";
 	let filePath = __dirname + "/tsconfig.json";
-	if (fs.existsSync(resourcePath)) 
+	if (fs.existsSync(resourcePath))
 	{
 		console.log(`Checking if tsconfig.json exists in ${filePath}`)
 		if (fs.existsSync(filePath))
 		{
 			console.log("tsconfig.json found!")
 			let resultPath = resourcePath + "/tsconfig.json";
-			fs.copyFileSync(filePath, resultPath);		
+			fs.copyFileSync(filePath, resultPath);
 			console.log(`tsconfig.json copied to ${resultPath} folder`);
 		}
 		filePath = __dirname + "/ModifierProperties.d.ts";
@@ -19,29 +19,38 @@ function copyFiles() {
 		if (fs.existsSync(filePath))
 		{
 			console.log("ModifierProperties.d.ts found!")
-			let resultPath = resourcePath + "/ModifierProperties.d.ts"		
+			let resultPath = resourcePath + "/ModifierProperties.d.ts"
 			fs.copyFileSync(filePath, resultPath);
 			console.log(`ModifierProperties.d.ts copied to ${resultPath} folder`);
 		}
+        filePath = __dirname + "/languages.ts"
+        console.log(`Checking if languages.ts exsts in ${filePath}`)
+        if (fs.existsSync(filePath))
+        {
+            console.log("languages.ts found!")
+            let resultPath = resourcePath + "/languages.ts"
+            fs.copyFileSync(filePath, resultPath);
+            console.log(`languages.ts copied to ${resultPath} folder`);
+        }
 	}
-	
+
 	let dirPath = __dirname + "/localization";
-	if (fs.existsSync(filePath) && fs.existsSync(resourcePath)) 
+	if (fs.existsSync(filePath) && fs.existsSync(resourcePath))
 	{
 		let resultPath = resourcePath + "/localization";
 		console.log(`Checking if localization folder exists in ${resultPath}`);
-		if (!fs.existsSync(resultPath)) 
+		if (!fs.existsSync(resultPath))
 		{
 			fs.mkdirSync(resultPath);
 			console.log("localization folder not found, creating the folder.")
 		}
 		console.log(`Checking if localizationData example files exist in folder`);
-		if (!fs.existsSync(resultPath + "/localizationData.ts")) 
+		if (!fs.existsSync(resultPath + "/localizationData.ts"))
 		{
 			fs.copyFileSync(dirPath + "/localizationData.ts", resultPath + "/localizationData.ts");
 			console.log(`localizationData example files do not exist: created at ${resultPath}`)
 		}
-		if (!fs.existsSync(resultPath + "/localizationData.js")) 
+		if (!fs.existsSync(resultPath + "/localizationData.js"))
 		{
 			fs.copyFileSync(dirPath + "/localizationData.js", resultPath + "/localizationData.js");
 		}
@@ -49,4 +58,38 @@ function copyFiles() {
 	console.log("\x1b[36m%s\x1b[0m", "Finished copy process!");
 }
 
+function changeImports()
+{
+	let filePath = __dirname + "/localizationCompiler.ts";
+
+    if (fs.existsSync(filePath))
+	{
+		fs.readFile(filePath, 'utf8' ,(err, data) =>
+		{
+			if (err) {return console.log(err)}
+			const result = data.replace('import { Language } from "./languages"', 'import { Language } from "~resource/languages"')
+
+			fs.writeFile(filePath, result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			 });
+		})
+	}
+
+	filePath = __dirname + "/localizationInterfaces.ts";
+	
+	if (fs.existsSync(filePath))
+	{
+		fs.readFile(filePath, 'utf8' ,(err, data) =>
+		{
+			if (err) {return console.log(err)}
+			const result = data.replace('import { Language } from "./languages"', 'import { Language } from "~resource/languages"')
+
+			fs.writeFile(filePath, result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			 });
+		})
+	}
+}
+
 copyFiles();
+changeImports();
