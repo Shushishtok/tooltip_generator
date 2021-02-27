@@ -60,33 +60,33 @@ function copyFiles() {
 
 function changeImports()
 {
-	let filePath = __dirname + "/localizationCompiler.ts";
+	const compilerFilePath = __dirname + "/localizationCompiler.ts";
 
-    if (fs.existsSync(filePath))
+    if (fs.existsSync(compilerFilePath))
 	{
-		fs.readFile(filePath, 'utf8' ,(err, data) =>
+		fs.readFile(compilerFilePath, 'utf8' ,(err, data) =>
 		{
 			if (err) {return console.log(err)}
 			const result = data.replace('import { Language } from "./languages"', 'import { Language } from "~resource/languages"')
 
-			fs.writeFile(filePath, result, 'utf8', function (err) {
+			fs.writeFile(compilerFilePath, result, 'utf8', function (err) {
 				if (err) return console.log(err);
 			 });
 		})
 	}
 
-	filePath = __dirname + "/localizationInterfaces.ts";
+	const interfacesFilePath = __dirname + "/localizationInterfaces.ts";
 	
-	if (fs.existsSync(filePath))
+	if (fs.existsSync(interfacesFilePath))
 	{
-		fs.readFile(filePath, 'utf8' ,(err, data) =>
+		fs.readFile(interfacesFilePath, 'utf8' ,(err, data) =>
 		{
 			if (err) {return console.log(err)}
-			const result = data.replace('import { Language } from "./languages"', 'import { Language } from "~resource/languages"')
+			const stringResult = data.replace('import { Language } from "./languages"', 'import { Language } from "~resource/languages"')
 
-			fs.writeFile(filePath, result, 'utf8', function (err) {
+			fs.writeFile(interfacesFilePath, stringResult, 'utf8', function (err) {
 				if (err) return console.log(err);
-			 });
+			});
 		})
 	}
 }
