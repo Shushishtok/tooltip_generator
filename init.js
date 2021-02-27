@@ -69,6 +69,7 @@ function copyFiles() {
     console.log("\x1b[36m%s\x1b[0m", "Finished copy process!");
 }
 function changeImports() {
+    var resourcePath = "node_modules/~resource";
     var compilerFilePath = __dirname + "/localizationCompiler.ts";
     if (fs.existsSync(compilerFilePath)) {
         fs.readFile(compilerFilePath, 'utf8', function (err, data) {
@@ -108,14 +109,14 @@ function changeImports() {
             });
         });
     }
-    var exampleFilePath = __dirname + "/localization/localizationData.ts";
+    var exampleFilePath = resourcePath + "/localization/localizationData.ts";
     if (fs.existsSync(exampleFilePath)) {
-        fs.readFile(interfacesFilePath, 'utf8', function (err, data) {
+        fs.readFile(exampleFilePath, 'utf8', function (err, data) {
             if (err) {
                 return console.log(err);
             }
             var stringResult = data.replace('import { AbilityLocalization, LocalizationData, ModifierLocalization, StandardLocalization } from "../localizationInterfaces";', 'import { AbilityLocalization, LocalizationData, ModifierLocalization, StandardLocalization } from "~generator/localizationInterfaces";');
-            fs.writeFile(interfacesFilePath, stringResult, 'utf8', function (err) {
+            fs.writeFile(exampleFilePath, stringResult, 'utf8', function (err) {
                 if (err)
                     return console.log(err);
             });

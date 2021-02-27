@@ -60,6 +60,7 @@ function copyFiles() {
 
 function changeImports()
 {
+	const resourcePath = "node_modules/~resource";
 	const compilerFilePath = __dirname + "/localizationCompiler.ts";
 
     if (fs.existsSync(compilerFilePath))
@@ -105,17 +106,17 @@ function changeImports()
 		})
 	}
 
-	const exampleFilePath = __dirname + "/localization/localizationData.ts"
+	const exampleFilePath = resourcePath + "/localization/localizationData.ts"
 
 	if (fs.existsSync(exampleFilePath))
 	{
-		fs.readFile(interfacesFilePath, 'utf8' ,(err, data) =>
+		fs.readFile(exampleFilePath, 'utf8' ,(err, data) =>
 		{
 			if (err) {return console.log(err)}
 			const stringResult = data.replace('import { AbilityLocalization, LocalizationData, ModifierLocalization, StandardLocalization } from "../localizationInterfaces";',
 											  'import { AbilityLocalization, LocalizationData, ModifierLocalization, StandardLocalization } from "~generator/localizationInterfaces";')
 
-			fs.writeFile(interfacesFilePath, stringResult, 'utf8', function (err) {
+			fs.writeFile(exampleFilePath, stringResult, 'utf8', function (err) {
 				if (err) return console.log(err);
 			});
 		})
