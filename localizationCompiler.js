@@ -1,10 +1,29 @@
 "use strict";
-exports.__esModule = true;
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalizationCompiler = void 0;
-var fs = require("fs");
-var path = require("path");
+var fs = __importStar(require("fs"));
+var path = __importStar(require("path"));
 var valve_kv_1 = require("valve-kv");
-var localizationInterfaces_1 = require("./localizationInterfaces");
+var languages_1 = require("./languages");
 var LocalizationCompiler = /** @class */ (function () {
     function LocalizationCompiler() {
         this.addon_filepath = path.join("node_modules/~resource", "addon_");
@@ -22,9 +41,9 @@ var LocalizationCompiler = /** @class */ (function () {
             return text;
         }
         else {
-            text = text.replace(/\${(\w*)}($|[^%])/g, "%$1%$2");
-            text = text.replace(/\${(\w*)}%/g, "%$1%%%");
-            text = text.replace(/%\${(\w*)}/g, "%%%$1%");
+            text = text.replace(/\{(\w*)}($|[^%])/g, "%$1%$2");
+            text = text.replace(/\{(\w*)}%/g, "%$1%%%");
+            text = text.replace(/%\{(\w*)}/g, "%%%$1%");
             return text;
         }
     };
@@ -37,7 +56,7 @@ var LocalizationCompiler = /** @class */ (function () {
         var localization_info = {
             AbilityArray: Abilities,
             ModifierArray: Modifiers,
-            StandardArray: StandardTooltips
+            StandardArray: StandardTooltips,
         };
         for (var _i = 0, _a = Object.entries(allData); _i < _a.length; _i++) {
             var _b = _a[_i], key = _b[0], data = _b[1];
@@ -55,10 +74,10 @@ var LocalizationCompiler = /** @class */ (function () {
             // }
         }
         // Generate information for every language
-        var languages = Object.values(localizationInterfaces_1.Language).filter(function (v) { return typeof v !== "number"; });
-        for (var _c = 0, languages_1 = languages; _c < languages_1.length; _c++) {
-            var language = languages_1[_c];
-            if (language != localizationInterfaces_1.Language.None) {
+        var languages = Object.values(languages_1.Language).filter(function (v) { return typeof v !== "number"; });
+        for (var _c = 0, languages_2 = languages; _c < languages_2.length; _c++) {
+            var language = languages_2[_c];
+            if (language != languages_1.Language.None) {
                 var tokens = this.GenerateContentStringForLanguage(language, localization_info);
                 this.WriteContentToAddonFile(language, tokens);
             }
