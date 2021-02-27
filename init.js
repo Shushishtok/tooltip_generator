@@ -48,6 +48,14 @@ function copyFiles() {
             fs.copyFileSync(filePath, resultPath);
             console.log("languages.ts copied to " + resultPath + " folder");
         }
+        filePath = __dirname + "/languages.js";
+        console.log("Checking if languages.ts exsts in " + filePath);
+        if (fs.existsSync(filePath)) {
+            console.log("languages.js found!");
+            var resultPath = resourcePath + "/languages.js";
+            fs.copyFileSync(filePath, resultPath);
+            console.log("languages.js copied to " + resultPath + " folder");
+        }
     }
     var dirPath = __dirname + "/localization";
     if (fs.existsSync(filePath) && fs.existsSync(resourcePath)) {
