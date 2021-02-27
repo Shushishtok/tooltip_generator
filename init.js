@@ -82,6 +82,19 @@ function changeImports() {
             });
         });
     }
+    var compilerJSFilePath = __dirname + "/localizationCompiler.js";
+    if (fs.existsSync(compilerJSFilePath)) {
+        fs.readFile(compilerJSFilePath, 'utf8', function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            var result = data.replace('languages_1 = require("./languages");', 'languages_1 = require("~resource/languages");');
+            fs.writeFile(compilerJSFilePath, result, 'utf8', function (err) {
+                if (err)
+                    return console.log(err);
+            });
+        });
+    }
     var interfacesFilePath = __dirname + "/localizationInterfaces.ts";
     if (fs.existsSync(interfacesFilePath)) {
         fs.readFile(interfacesFilePath, 'utf8', function (err, data) {
@@ -89,6 +102,19 @@ function changeImports() {
                 return console.log(err);
             }
             var stringResult = data.replace('import { Language } from "./languages"', 'import { Language } from "~resource/languages"');
+            fs.writeFile(interfacesFilePath, stringResult, 'utf8', function (err) {
+                if (err)
+                    return console.log(err);
+            });
+        });
+    }
+    var exampleFilePath = __dirname + "/localization/localizationData.ts";
+    if (fs.existsSync(exampleFilePath)) {
+        fs.readFile(interfacesFilePath, 'utf8', function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            var stringResult = data.replace('import { AbilityLocalization, LocalizationData, ModifierLocalization, StandardLocalization } from "../localizationInterfaces";', 'import { AbilityLocalization, LocalizationData, ModifierLocalization, StandardLocalization } from "~generator/localizationInterfaces";');
             fs.writeFile(interfacesFilePath, stringResult, 'utf8', function (err) {
                 if (err)
                     return console.log(err);

@@ -75,6 +75,21 @@ function changeImports()
 		})
 	}
 
+	const compilerJSFilePath = __dirname + "/localizationCompiler.js";
+
+    if (fs.existsSync(compilerJSFilePath))
+	{
+		fs.readFile(compilerJSFilePath, 'utf8' ,(err, data) =>
+		{
+			if (err) {return console.log(err)}
+			const result = data.replace('languages_1 = require("./languages");', 'languages_1 = require("~resource/languages");')
+
+			fs.writeFile(compilerJSFilePath, result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			 });
+		})
+	}
+
 	const interfacesFilePath = __dirname + "/localizationInterfaces.ts";
 	
 	if (fs.existsSync(interfacesFilePath))
@@ -89,6 +104,22 @@ function changeImports()
 			});
 		})
 	}
+
+	const exampleFilePath = __dirname + "/localization/localizationData.ts"
+
+	if (fs.existsSync(exampleFilePath))
+	{
+		fs.readFile(interfacesFilePath, 'utf8' ,(err, data) =>
+		{
+			if (err) {return console.log(err)}
+			const stringResult = data.replace('import { AbilityLocalization, LocalizationData, ModifierLocalization, StandardLocalization } from "../localizationInterfaces";',
+											  'import { AbilityLocalization, LocalizationData, ModifierLocalization, StandardLocalization } from "~generator/localizationInterfaces";')
+
+			fs.writeFile(interfacesFilePath, stringResult, 'utf8', function (err) {
+				if (err) return console.log(err);
+			});
+		})
+	}	
 }
 
 copyFiles();
