@@ -32,6 +32,16 @@ function copyFiles() {
             fs.copyFileSync(filePath, resultPath);
             console.log(`languages.ts copied to ${resultPath} folder`);
         }
+
+		filePath = __dirname + "/languages.js"
+        console.log(`Checking if languages.ts exsts in ${filePath}`)
+        if (fs.existsSync(filePath))
+        {
+            console.log("languages.js found!")
+            let resultPath = resourcePath + "/languages.js"
+            fs.copyFileSync(filePath, resultPath);
+            console.log(`languages.js copied to ${resultPath} folder`);
+        }
 	}
 
 	let dirPath = __dirname + "/localization";

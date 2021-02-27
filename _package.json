@@ -3,7 +3,7 @@
   "version": "1.3.14",
   "scripts": {
     "build": "run-p build:*",
-    "dev": "run-p dev:*",
+    "dev": "run-p dev:*",    
     "dev:localizationCompiler": "tsc --project node_modules/~resource/tsconfig.json",
     "dev:localizationCompilerWatcher": "tsc --project node_modules/~resource/tsconfig.json --watch",
     "dev:runlocalizationWatcher": "node node_modules/~generator/fsWatcher.js",
