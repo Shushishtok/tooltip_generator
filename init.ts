@@ -7,42 +7,42 @@ function copyFiles() {
 	if (fs.existsSync(resourcePath))
 	{
 		filePath = __dirname + "/tsconfig.json";
+		let resultPath = resourcePath + "/tsconfig.json";
 		console.log(`Checking if tsconfig.json exists in ${filePath}`)
-		if (fs.existsSync(filePath))
+		if (fs.existsSync(resultPath))
 		{
 			console.log("tsconfig.json found!");
 		} else {
-			let resultPath = resourcePath + "/tsconfig.json";
 			fs.copyFileSync(filePath, resultPath);		
 			console.log(`Not found, tsconfig.json copied to ${resultPath} folder`);
 		}
 		filePath = __dirname + "/ModifierProperties.d.ts";
+		resultPath = resourcePath + "/ModifierProperties.d.ts";
 		console.log(`Checking if ModifierProperties.d.ts exists in ${filePath}`)
-		if (fs.existsSync(filePath))
+		if (fs.existsSync(resultPath))
 		{
 			console.log("ModifierProperties.d.ts found!");
-		} else {
-			let resultPath = resourcePath + "/ModifierProperties.d.ts"		
+		} else {	
 			fs.copyFileSync(filePath, resultPath);
 			console.log(`Not found, ModifierProperties.d.ts copied to ${resultPath} folder`);
 		}
-		filePath = __dirname + "/languages.ts"
+		filePath = __dirname + "/languages.ts";
+		resultPath = resourcePath + "/languages.ts";
 		console.log(`Checking if languages.ts exsts in ${filePath}`)
-		if (fs.existsSync(filePath))
+		if (fs.existsSync(resultPath))
 		{
 			console.log("languages.ts found!");
 		} else {
-			let resultPath = resourcePath + "/languages.ts"
 			fs.copyFileSync(filePath, resultPath);
 			console.log(`Not found, languages.ts copied to ${resultPath} folder`);
 		}
-		filePath = __dirname + "/languages.js"
+		filePath = __dirname + "/languages.js";
+		resultPath = resourcePath + "/languages.js";
 		console.log(`Checking if languages.js exsts in ${filePath}`)
-		if (fs.existsSync(filePath))
+		if (fs.existsSync(resultPath))
 		{
 			console.log("languages.js found!");
 		} else {
-			let resultPath = resourcePath + "/languages.js"
 			fs.copyFileSync(filePath, resultPath);
 			console.log(`Not found, languages.js copied to ${resultPath} folder`);
 		}
