@@ -18,6 +18,33 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = __importStar(require("fs"));
 var child = __importStar(require("child_process"));
@@ -34,6 +61,7 @@ var aliases = [
 ];
 // Check package.json
 function CheckPackage() {
+    var e_1, _a;
     console.log("Searching for package.json...");
     var rootPath = "../../../";
     var scriptPath = "./";
@@ -70,9 +98,18 @@ function CheckPackage() {
         if (!hasDev) {
             goalPackage.scripts["dev"] = "run-p dev:*";
         }
-        for (var _i = 0, devScripts_1 = devScripts; _i < devScripts_1.length; _i++) {
-            var _a = devScripts_1[_i], name_2 = _a[0], cmd = _a[1];
-            goalPackage.scripts[name_2] = cmd;
+        try {
+            for (var devScripts_1 = __values(devScripts), devScripts_1_1 = devScripts_1.next(); !devScripts_1_1.done; devScripts_1_1 = devScripts_1.next()) {
+                var _b = __read(devScripts_1_1.value, 2), name_2 = _b[0], cmd = _b[1];
+                goalPackage.scripts[name_2] = cmd;
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (devScripts_1_1 && !devScripts_1_1.done && (_a = devScripts_1.return)) _a.call(devScripts_1);
+            }
+            finally { if (e_1) throw e_1.error; }
         }
         if (!hasInit) {
             goalPackage.scripts["init"] = "link-module-alias && node node_modules/~generator/init.js";
