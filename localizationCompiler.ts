@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path'
 import { KVObject, serialize } from 'valve-kv'
 import { LocalizationData, AbilityLocalization, ModifierLocalization, StandardLocalization } from "./localizationInterfaces";
-import { Language } from "./languages"
+import { Language } from "~resource/languages"
 
 export class LocalizationCompiler
 {
@@ -67,7 +67,7 @@ export class LocalizationCompiler
 		const languages = Object.values(Language).filter(v => typeof v !== "number");
 		for (const language of languages)
 		{            
-			if (language != Language.None)
+			if (language !== Language.None)
 			{
 				const tokens: KVObject = this.GenerateContentStringForLanguage(language, localization_info);
 				this.WriteContentToAddonFile(language, tokens);
@@ -301,25 +301,42 @@ export class LocalizationCompiler
 		// Set based on language
 		const filepath = this.addon_filepath + language.toString() + this.filepath_format;
 
-		// Remove file contents, or create a fresh one if it doesn't exists yet.
-		const fd = fs.openSync(filepath, 'w');
-		fs.closeSync(fd);
-
 		// Add the opening tokens        
 		const kv = {lang: { Language: language, Tokens: tokens}}
 
 		// Serialize!        
 		let write_string = serialize(kv);
 
-		// Write to the file
-		fs.writeFileSync(filepath, write_string);
+		// Try writing if the output is not busy
+		this.TryWriting(filepath, write_string, () => {
 
-		// Prepare the output
-		this.currentWrites.add(language);
-		if (this.writeTimeout) {
-			clearTimeout(this.writeTimeout);
+			// Prepare the output
+			this.currentWrites.add(language);
+			if (this.writeTimeout) {
+				clearTimeout(this.writeTimeout);
+			}
+			this.writeTimeout = setTimeout(() => this.FinishWrite(), 500);
+		});
+	}
+
+	TryWriting(filepath: string, write_string: string, success: () => void, tries: number = 0) {
+		if (tries > 5) {
+			console.log("\x1b[31m%s\x1b[0m", "Tried too many times to write without success!");
+			return;
 		}
-		this.writeTimeout = setTimeout(() => this.FinishWrite(), 500);
+		try {
+			// Remove file contents, or create a fresh one if it doesn't exists yet.
+			const fd = fs.openSync(filepath, 'w');
+			fs.closeSync(fd);
+
+			// Write to the file
+			fs.writeFileSync(filepath, write_string);
+		} catch {
+			// try again after a short time
+			setTimeout(() => this.TryWriting(filepath, write_string, success, tries + 1), 1000);
+			return;
+		}
+		success();
 	}
 
 	// Print the output

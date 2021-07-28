@@ -50,7 +50,7 @@ exports.LocalizationCompiler = void 0;
 var fs = __importStar(require("fs"));
 var path = __importStar(require("path"));
 var valve_kv_1 = require("valve-kv");
-var languages_1 = require("./languages");
+var languages_1 = require("~resource/languages");
 var LocalizationCompiler = /** @class */ (function () {
     function LocalizationCompiler() {
         this.addon_filepath = path.join("node_modules/~resource", "addon_");
@@ -113,7 +113,7 @@ var LocalizationCompiler = /** @class */ (function () {
         try {
             for (var languages_2 = __values(languages), languages_2_1 = languages_2.next(); !languages_2_1.done; languages_2_1 = languages_2.next()) {
                 var language = languages_2_1.value;
-                if (language != languages_1.Language.None) {
+                if (language !== languages_1.Language.None) {
                     var tokens = this.GenerateContentStringForLanguage(language, localization_info);
                     this.WriteContentToAddonFile(language, tokens);
                 }
@@ -366,21 +366,40 @@ var LocalizationCompiler = /** @class */ (function () {
         var _this = this;
         // Set based on language
         var filepath = this.addon_filepath + language.toString() + this.filepath_format;
-        // Remove file contents, or create a fresh one if it doesn't exists yet.
-        var fd = fs.openSync(filepath, 'w');
-        fs.closeSync(fd);
         // Add the opening tokens        
         var kv = { lang: { Language: language, Tokens: tokens } };
         // Serialize!        
         var write_string = valve_kv_1.serialize(kv);
-        // Write to the file
-        fs.writeFileSync(filepath, write_string);
-        // Prepare the output
-        this.currentWrites.add(language);
-        if (this.writeTimeout) {
-            clearTimeout(this.writeTimeout);
+        // Try writing if the output is not busy
+        this.TryWriting(filepath, write_string, function () {
+            // Prepare the output
+            _this.currentWrites.add(language);
+            if (_this.writeTimeout) {
+                clearTimeout(_this.writeTimeout);
+            }
+            _this.writeTimeout = setTimeout(function () { return _this.FinishWrite(); }, 500);
+        });
+    };
+    LocalizationCompiler.prototype.TryWriting = function (filepath, write_string, success, tries) {
+        var _this = this;
+        if (tries === void 0) { tries = 0; }
+        if (tries > 5) {
+            console.log("\x1b[31m%s\x1b[0m", "Tried too many times to write without success!");
+            return;
         }
-        this.writeTimeout = setTimeout(function () { return _this.FinishWrite(); }, 500);
+        try {
+            // Remove file contents, or create a fresh one if it doesn't exists yet.
+            var fd = fs.openSync(filepath, 'w');
+            fs.closeSync(fd);
+            // Write to the file
+            fs.writeFileSync(filepath, write_string);
+        }
+        catch (_a) {
+            // try again after a short time
+            setTimeout(function () { return _this.TryWriting(filepath, write_string, success, tries + 1); }, 1000);
+            return;
+        }
+        success();
     };
     // Print the output
     LocalizationCompiler.prototype.FinishWrite = function () {
