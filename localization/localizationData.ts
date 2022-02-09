@@ -1,31 +1,20 @@
-import { AbilityLocalization, LocalizationData, ModifierLocalization, StandardLocalization } from "../localizationInterfaces";
 import { Language } from "../languages";
+import { AbilityLocalization, LocalizationData, ModifierLocalization, GeneralLocalization } from "../localizationInterfaces";
 
-export function GenerateLocalizationData(): LocalizationData
-{
-    // This section can be safely ignored, as it is only logic.
-    //#region Localization logic
-    // Arrays
-    const Abilities: Array<AbilityLocalization> = new Array<AbilityLocalization>();
-    const Modifiers: Array<ModifierLocalization> = new Array<ModifierLocalization>();
-    const StandardTooltips: Array<StandardLocalization> = new Array<StandardLocalization>();    
+export function GenerateLocalizationData({Abilities, Modifiers, General}: LocalizationData): void {
+    Abilities["Hello_World"] = "Test Ability";
 
-    // Create object of arrays
-    const localization_info: LocalizationData =
-    {
-        AbilityArray: Abilities,
-        ModifierArray: Modifiers,
-        StandardArray: StandardTooltips,        
-    };
-    //#endregion
+    General["addon_game_name"] = "Tooltip Testing";
 
-    // Enter localization data below! 
-    StandardTooltips.push({
-        classname: "Hello",
-        name: "test"
-    });
-
-
-    // Return data to compiler
-    return localization_info;
+    Modifiers["modifier_generic_testing"] = {
+        name: "Generic Testing",
+        description: "This is a modifier block test.",
+        language_overrides: [
+            {
+                language: Language.Russian,
+                description: "THIS IS A HUGE RUSSIAN TEXT."
+            }
+            
+        ]
+    }
 }
