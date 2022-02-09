@@ -1,100 +1,74 @@
-import { Language } from "./languages";
+import { Language } from "~resource/languages";
 
-export interface AbilityLocalization
-{
-    ability_classname: string;
+// all tooltips
+export interface LocalizationData {
+    General: GeneralLocalization,
+    Abilities: AbilityLocalization,
+    Modifiers: ModifierLocalization,
+}
+
+// tooltips for abilities
+export interface AbilityLocalization {
+    [classname: string]: string | AbilityLocalizationBlock;
+}
+
+// tooltips for modifiers
+export interface ModifierLocalization {
+    [classname:string]: string | ModifierLocalizationBlock;
+}
+
+// tooltips for anything
+export interface GeneralLocalization {
+    [classname:string]: string | GeneralLocalizationBlock;
+}
+
+// tooltips with language overrides
+export interface AbilityLocalizationBlock extends AbilityLocalizationInfo, LanguageOverrides<AbilityLocalizationInfo> {}
+export interface ModifierLocalizationBlock extends ModifierLocalizationInfo, LanguageOverrides<ModifierLocalizationInfo> {}
+export interface GeneralLocalizationBlock extends GeneralLocalizationInfo, LanguageOverrides<GeneralLocalizationInfo> {}
+
+
+// ability tooltip
+export interface AbilityLocalizationInfo {
     name?: string;
     description?: string;
-    scepter_description?: string;
-    shard_description?: string;
+    scepter?: string;
+    shard?: string;
     lore?: string;
     notes?: Array<string>;
-    //reimagined_effects?: Array<ReimaginedEffect>;
-    ability_specials?: Array<AbilitySpecialLocalization>;
-    language_overrides?: Array<AbilityLocalizationContent>;
+    specials?: AbilitySpecialValues;
 }
 
-export interface AbilityLocalizationContent
-{
-    language: Language;
-    name_override?: string;
-    description_override?: string;
-    scepter_description_override?: string;
-    shard_description_override?: string;
-    lore_override?: string;
-    notes_override?: Array<string>;
-    //reimagined_effects_override?: Array<ReimaginedEffect>;
-    ability_specials_override?: Array<AbilitySpecialLocalization>;
-}
-
-export interface ModifierLocalization
-{
-    modifier_classname: string;
+// modifier tooltip
+export interface ModifierLocalizationInfo {
     name?: string;
     description?: string;
-    language_overrides?: Array<ModifierLocalizationContent>;
 }
 
-export interface ModifierLocalizationContent
-{
-    language: Language;
-    name_override?: string
-    description_override?: string;
+// general tooltip
+export interface GeneralLocalizationInfo { 
+    name: string 
 }
 
-export interface StandardLocalization
-{
-    classname: string;
+// language overrides
+// maybe change to dictionary {language -> T | string}
+export interface LanguageOverrides<T> { 
+    language_overrides?: Array<T & LanguageOverride> 
+}
+
+// overrides one language
+export interface LanguageOverride {
+    language: Language
+}
+
+export interface AbilitySpecialValues {
+    [key: string]: string | AbilitySpecialValue
+}
+
+
+// abilits special value
+export interface AbilitySpecialValue {
     name: string;
-    language_overrides?: StandardLocalizationNameOverride[]
-}
-
-export interface StandardLocalizationNameOverride
-{
-    language: Language;
-    name_override: string
-}
-
-// export interface ReimaginedEffect
-// {
-//     title: string;
-//     description: string;
-// }
-
-export interface AbilitySpecialLocalization
-{
-    ability_special: string;
-    text: string;
-    percentage?: boolean; // false by default if omitted
-    item_stat?: boolean // false by default if omitted
-}
-
-// export interface HeroTalents
-// {
-//     talent_classname: string;
-//     talents: Array<HeroTalentLocalization>;
-// }
-
-// export interface HeroTalentLocalization
-// {
-//     name: string;
-//     description: string;
-//     lore: string;
-//     language_overrides?: Array<TalentLocalizationOverrides>
-// }
-
-// export interface TalentLocalizationOverrides
-// {
-//     language: Language;
-//     name_override?: string;
-//     description_override?: string;
-//     lore_override?: string;
-// }
-
-export interface LocalizationData
-{
-    AbilityArray?: Array<AbilityLocalization>;
-    ModifierArray?: Array<ModifierLocalization>;
-    StandardArray?: Array<StandardLocalization>;
-    //TalentArray?: Array<HeroTalents>;
+    percentage?: boolean;
+    item_stat?: boolean;
 }

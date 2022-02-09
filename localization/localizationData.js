@@ -1,26 +1,20 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.GenerateLocalizationData = void 0;
-function GenerateLocalizationData() {
-    // This section can be safely ignored, as it is only logic.
-    //#region Localization logic
-    // Arrays
-    var Abilities = new Array();
-    var Modifiers = new Array();
-    var StandardTooltips = new Array();
-    // Create object of arrays
-    var localization_info = {
-        AbilityArray: Abilities,
-        ModifierArray: Modifiers,
-        StandardArray: StandardTooltips,
+var languages_1 = require("../languages");
+function GenerateLocalizationData(_a) {
+    var Abilities = _a.Abilities, Modifiers = _a.Modifiers, General = _a.General;
+    Abilities["Hello_World"] = "Test Ability";
+    General["addon_game_name"] = "Tooltip Testing";
+    Modifiers["modifier_generic_testing"] = {
+        name: "Generic Testing",
+        description: "This is a modifier block test.",
+        language_overrides: [
+            {
+                language: languages_1.Language.Russian,
+                description: "THIS IS A HUGE RUSSIAN TEXT."
+            }
+        ]
     };
-    //#endregion
-    // Enter localization data below! 
-    StandardTooltips.push({
-        classname: "Hello",
-        name: "test"
-    });
-    // Return data to compiler
-    return localization_info;
 }
 exports.GenerateLocalizationData = GenerateLocalizationData;
